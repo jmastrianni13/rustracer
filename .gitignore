@@ -21,7 +21,7 @@ Cargo.lock
 #.idea/
 =======
 /target
-*.lock
+Cargo.lock
 
 **/*.ppm
 **/*.swp
