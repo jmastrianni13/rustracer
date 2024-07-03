@@ -40,47 +40,36 @@ fn render_image() {
 }
 
 #[derive(Debug)]
-struct Point {
-    x: f64,
-    y: f64,
-    z: f64,
-}
-
-#[derive(Debug)]
-struct Vec3 {
-    point: Point,
-}
+struct Vec3(f64, f64, f64);
 
 impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
-        let mut point = Point { x, y, z };
-        return Self { point };
+        return Self(x, y, z);
     }
 }
 
 impl Neg for Vec3 {
     type Output = Self;
     fn neg(self) -> Self::Output {
-        let Point { x, y, z } = self.point;
-        return Vec3::new(-x, -y, -z);
+        return Vec3::new(-self.0, -self.1, -self.2);
     }
 }
 
 impl AddAssign for Vec3 {
     // type is implied to be Vec3
     fn add_assign(&mut self, rhs: Vec3) {
-        self.point.x += rhs.point.x;
-        self.point.y += rhs.point.y;
-        self.point.z += rhs.point.z;
+        self.0 += rhs.0;
+        self.1 += rhs.1;
+        self.2 += rhs.2;
     }
 }
 
 impl MulAssign<f64> for Vec3 {
     // have to explicitly type f64 because it is not the same as self
     fn mul_assign(&mut self, t: f64) {
-        self.point.x *= t;
-        self.point.y *= t;
-        self.point.z *= t;
+        self.0 *= t;
+        self.1 *= t;
+        self.2 *= t;
     }
 }
 
@@ -97,44 +86,44 @@ mod tests {
     #[test]
     fn build_vec3() {
         let v3 = Vec3::new(1.0, 2.0, 3.0);
-        assert_eq!(v3.point.x, 1.0);
-        assert_eq!(v3.point.y, 2.0);
-        assert_eq!(v3.point.z, 3.0);
+        assert_eq!(v3.0, 1.0);
+        assert_eq!(v3.1, 2.0);
+        assert_eq!(v3.2, 3.0);
     }
 
     #[test]
     fn get_negated_vec3() {
         let v3 = Vec3::new(1.0, 2.0, 3.0);
         let neg_v3 = -v3;
-        assert_eq!(neg_v3.point.x, -1.0);
-        assert_eq!(neg_v3.point.y, -2.0);
-        assert_eq!(neg_v3.point.z, -3.0);
+        assert_eq!(neg_v3.0, -1.0);
+        assert_eq!(neg_v3.1, -2.0);
+        assert_eq!(neg_v3.2, -3.0);
     }
 
     #[test]
     fn add_to_vec3() {
         let mut v3 = Vec3::new(1.0, 2.0, 3.0);
         v3 += Vec3::new(4.0, 4.0, 4.0);
-        assert_eq!(v3.point.x, 5.0);
-        assert_eq!(v3.point.y, 6.0);
-        assert_eq!(v3.point.z, 7.0);
+        assert_eq!(v3.0, 5.0);
+        assert_eq!(v3.1, 6.0);
+        assert_eq!(v3.2, 7.0);
     }
 
     #[test]
     fn mult_vec3() {
         let mut v3 = Vec3::new(1.0, 2.0, 3.0);
         v3 *= 3.0;
-        assert_eq!(v3.point.x, 3.0);
-        assert_eq!(v3.point.y, 6.0);
-        assert_eq!(v3.point.z, 9.0);
+        assert_eq!(v3.0, 3.0);
+        assert_eq!(v3.1, 6.0);
+        assert_eq!(v3.2, 9.0);
     }
 
     #[test]
     fn div_vec3() {
         let mut v3 = Vec3::new(2.0, 4.0, 6.0);
         v3 /= 2.0;
-        assert_eq!(v3.point.x, 1.0);
-        assert_eq!(v3.point.y, 2.0);
-        assert_eq!(v3.point.z, 3.0);
+        assert_eq!(v3.0, 1.0);
+        assert_eq!(v3.1, 2.0);
+        assert_eq!(v3.2, 3.0);
     }
 }
