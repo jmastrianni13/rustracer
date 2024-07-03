@@ -1,5 +1,5 @@
 use std::io::{self, Write};
-use std::ops::{AddAssign, DivAssign, MulAssign};
+use std::ops::{AddAssign, DivAssign, MulAssign, Neg};
 
 fn main() {
     let vec3 = Vec3::new(0.0, 0.0, 0.0);
@@ -56,25 +56,13 @@ impl Vec3 {
         let mut point = Point { x, y, z };
         return Self { point };
     }
+}
 
-    pub fn negate(self) -> Point {
-        return Point {
-            x: -self.point.x,
-            y: -self.point.y,
-            z: -self.point.z,
-        };
-    }
-
-    pub fn x(self) -> f64 {
-        return self.point.x;
-    }
-
-    pub fn y(self) -> f64 {
-        return self.point.y;
-    }
-
-    pub fn z(self) -> f64 {
-        return self.point.z;
+impl Neg for Vec3 {
+    type Output = Self;
+    fn neg(self) -> Self::Output {
+        let Point { x, y, z } = self.point;
+        return Vec3::new(-x, -y, -z);
     }
 }
 
@@ -99,5 +87,54 @@ impl MulAssign<f64> for Vec3 {
 impl DivAssign<f64> for Vec3 {
     fn div_assign(&mut self, t: f64) {
         *self *= 1 as f64 / t;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn build_vec3() {
+        let v3 = Vec3::new(1.0, 2.0, 3.0);
+        assert_eq!(v3.point.x, 1.0);
+        assert_eq!(v3.point.y, 2.0);
+        assert_eq!(v3.point.z, 3.0);
+    }
+
+    #[test]
+    fn get_negated_vec3() {
+        let v3 = Vec3::new(1.0, 2.0, 3.0);
+        let neg_v3 = -v3;
+        assert_eq!(neg_v3.point.x, -1.0);
+        assert_eq!(neg_v3.point.y, -2.0);
+        assert_eq!(neg_v3.point.z, -3.0);
+    }
+
+    #[test]
+    fn add_to_vec3() {
+        let mut v3 = Vec3::new(1.0, 2.0, 3.0);
+        v3 += Vec3::new(4.0, 4.0, 4.0);
+        assert_eq!(v3.point.x, 5.0);
+        assert_eq!(v3.point.y, 6.0);
+        assert_eq!(v3.point.z, 7.0);
+    }
+
+    #[test]
+    fn mult_vec3() {
+        let mut v3 = Vec3::new(1.0, 2.0, 3.0);
+        v3 *= 3.0;
+        assert_eq!(v3.point.x, 3.0);
+        assert_eq!(v3.point.y, 6.0);
+        assert_eq!(v3.point.z, 9.0);
+    }
+
+    #[test]
+    fn div_vec3() {
+        let mut v3 = Vec3::new(2.0, 4.0, 6.0);
+        v3 /= 2.0;
+        assert_eq!(v3.point.x, 1.0);
+        assert_eq!(v3.point.y, 2.0);
+        assert_eq!(v3.point.z, 3.0);
     }
 }
