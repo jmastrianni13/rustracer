@@ -1,5 +1,5 @@
 use std::io::{self, Write};
-use std::ops::{AddAssign, DivAssign, MulAssign, Neg};
+use std::ops::{AddAssign, DivAssign, Index, MulAssign, Neg};
 
 fn main() {
     let vec3 = Vec3::new(0.0, 0.0, 0.0);
@@ -40,36 +40,61 @@ fn render_image() {
 }
 
 #[derive(Debug)]
-struct Vec3(f64, f64, f64);
+struct Vec3 {
+    x: f64,
+    y: f64,
+    z: f64,
+}
 
 impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
-        return Self(x, y, z);
+        return Self { x, y, z };
+    }
+
+    pub fn length(self) -> f64 {
+        return self.length_squared().sqrt();
+    }
+
+    pub fn length_squared(&self) -> f64 {
+        return &self.x * &self.x + &self.y * &self.y + &self.z * &self.z;
+    }
+}
+
+impl Index<usize> for Vec3 {
+    type Output = f64;
+
+    fn index(&self, i: usize) -> &Self::Output {
+        match i {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            _ => panic!("index out of bounds for Vec3"),
+        }
     }
 }
 
 impl Neg for Vec3 {
     type Output = Self;
     fn neg(self) -> Self::Output {
-        return Vec3::new(-self.0, -self.1, -self.2);
+        return Vec3::new(-self.x, -self.y, -self.z);
     }
 }
 
 impl AddAssign for Vec3 {
     // type is implied to be Vec3
     fn add_assign(&mut self, rhs: Vec3) {
-        self.0 += rhs.0;
-        self.1 += rhs.1;
-        self.2 += rhs.2;
+        self.x += rhs.x;
+        self.y += rhs.y;
+        self.z += rhs.z;
     }
 }
 
 impl MulAssign<f64> for Vec3 {
     // have to explicitly type f64 because it is not the same as self
     fn mul_assign(&mut self, t: f64) {
-        self.0 *= t;
-        self.1 *= t;
-        self.2 *= t;
+        self.x *= t;
+        self.y *= t;
+        self.z *= t;
     }
 }
 
@@ -86,44 +111,64 @@ mod tests {
     #[test]
     fn build_vec3() {
         let v3 = Vec3::new(1.0, 2.0, 3.0);
-        assert_eq!(v3.0, 1.0);
-        assert_eq!(v3.1, 2.0);
-        assert_eq!(v3.2, 3.0);
+        assert_eq!(v3.x, 1.0);
+        assert_eq!(v3.y, 2.0);
+        assert_eq!(v3.z, 3.0);
     }
 
     #[test]
     fn get_negated_vec3() {
         let v3 = Vec3::new(1.0, 2.0, 3.0);
         let neg_v3 = -v3;
-        assert_eq!(neg_v3.0, -1.0);
-        assert_eq!(neg_v3.1, -2.0);
-        assert_eq!(neg_v3.2, -3.0);
+        assert_eq!(neg_v3.x, -1.0);
+        assert_eq!(neg_v3.y, -2.0);
+        assert_eq!(neg_v3.z, -3.0);
     }
 
     #[test]
     fn add_to_vec3() {
         let mut v3 = Vec3::new(1.0, 2.0, 3.0);
         v3 += Vec3::new(4.0, 4.0, 4.0);
-        assert_eq!(v3.0, 5.0);
-        assert_eq!(v3.1, 6.0);
-        assert_eq!(v3.2, 7.0);
+        assert_eq!(v3.x, 5.0);
+        assert_eq!(v3.y, 6.0);
+        assert_eq!(v3.z, 7.0);
     }
 
     #[test]
     fn mult_vec3() {
         let mut v3 = Vec3::new(1.0, 2.0, 3.0);
         v3 *= 3.0;
-        assert_eq!(v3.0, 3.0);
-        assert_eq!(v3.1, 6.0);
-        assert_eq!(v3.2, 9.0);
+        assert_eq!(v3.x, 3.0);
+        assert_eq!(v3.y, 6.0);
+        assert_eq!(v3.z, 9.0);
     }
 
     #[test]
     fn div_vec3() {
         let mut v3 = Vec3::new(2.0, 4.0, 6.0);
         v3 /= 2.0;
-        assert_eq!(v3.0, 1.0);
-        assert_eq!(v3.1, 2.0);
-        assert_eq!(v3.2, 3.0);
+        assert_eq!(v3.x, 1.0);
+        assert_eq!(v3.y, 2.0);
+        assert_eq!(v3.z, 3.0);
+    }
+
+    #[test]
+    fn index_vec3() {
+        let mut v3 = Vec3::new(1.0, 2.0, 3.0);
+        assert_eq!(v3[0], 1.0);
+        assert_eq!(v3[1], 2.0);
+        assert_eq!(v3[2], 3.0);
+    }
+
+    #[test]
+    fn vec3_length_squared() {
+        let mut v3 = Vec3::new(0.0, 3.0, 4.0);
+        assert_eq!(v3.length_squared(), 25.0);
+    }
+
+    #[test]
+    fn vec3_length() {
+        let mut v3 = Vec3::new(0.0, 3.0, 4.0);
+        assert_eq!(v3.length(), 5.0);
     }
 }
