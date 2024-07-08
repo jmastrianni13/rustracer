@@ -137,6 +137,13 @@ fn get_cross_prod(lhs: &Vec3, rhs: &Vec3) -> Vec3 {
 mod tests {
     use super::*;
 
+    const EPSILON: f64 = 1e-10;
+
+    fn approx_eq(x: f64, y: f64) -> bool {
+        // deal with floating point precision issues
+        return (x - y).abs() < EPSILON;
+    }
+
     #[test]
     fn build_vec3() {
         let v3 = Vec3::new(1.0, 2.0, 3.0);
@@ -206,7 +213,7 @@ mod tests {
         let v3 = Vec3::new(0.0, 3.0, 4.0);
         let v3_unit = v3.unit_vector();
         assert_eq!(v3_unit.x, 0.0);
-        assert_eq!(v3_unit.y, 0.6);
+        assert!(approx_eq(v3_unit.y, 0.6));
         assert_eq!(v3_unit.z, 0.8);
         assert_eq!(v3.x, 0.0);
         assert_eq!(v3.y, 3.0);
