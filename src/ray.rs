@@ -1,14 +1,14 @@
 use crate::vec3;
 
-type Point3 = vec3::Vec3;
+pub type Point3 = vec3::Vec3;
 
-struct Ray {
-    orig: Point3,
-    dir: vec3::Vec3,
+pub struct Ray {
+    pub orig: Point3,
+    pub dir: vec3::Vec3,
 }
 
 impl Ray {
-    fn new(orig: Point3, dir: vec3::Vec3) -> Self {
+    pub fn new(orig: Point3, dir: vec3::Vec3) -> Self {
         return Self { orig, dir };
     }
 
