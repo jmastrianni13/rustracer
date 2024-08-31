@@ -6,7 +6,19 @@ fn main() {
     render_image();
 }
 
+fn hit_sphere(center: ray::Point3, radius: f64, r: &ray::Ray) -> bool {
+    let oc = center - r.orig.clone();
+    let a = vec3::get_dot_prod(&r.dir, &r.dir);
+    let b = vec3::get_dot_prod(&r.dir, &oc) * -2.0;
+    let c = vec3::get_dot_prod(&oc, &oc) - radius * radius;
+    let discriminant = b * b - 4.0 * a * c;
+    return discriminant >= 0.0;
+}
+
 fn ray_color(r: &ray::Ray) -> color::Color {
+    if hit_sphere(ray::Point3::new(0.0, 0.0, -1.0), 0.5, r) {
+        return color::Color::new(1.0, 0.0, 0.0);
+    }
     let unit_direction = r.dir.unit_vector();
     let a = 0.5 * (unit_direction.y + 1.0);
     return color::Color::new(1.0, 1.0, 1.0) * (1.0 - a) + color::Color::new(0.5, 0.7, 1.0) * a;

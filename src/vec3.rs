@@ -121,7 +121,7 @@ fn get_hadamard_prod(lhs: &Vec3, rhs: &Vec3) -> Vec3 {
     return Vec3::new(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
 }
 
-fn get_dot_prod(lhs: &Vec3, rhs: &Vec3) -> f64 {
+pub fn get_dot_prod(lhs: &Vec3, rhs: &Vec3) -> f64 {
     return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
 }
 
