@@ -6,18 +6,26 @@ fn main() {
     render_image();
 }
 
-fn hit_sphere(center: ray::Point3, radius: f64, r: &ray::Ray) -> bool {
+fn hit_sphere(center: ray::Point3, radius: f64, r: &ray::Ray) -> f64 {
     let oc = center - r.orig.clone();
-    let a = vec3::get_dot_prod(&r.dir, &r.dir);
-    let b = vec3::get_dot_prod(&r.dir, &oc) * -2.0;
-    let c = vec3::get_dot_prod(&oc, &oc) - radius * radius;
-    let discriminant = b * b - 4.0 * a * c;
-    return discriminant >= 0.0;
+    let a = r.dir.length_squared();
+    let h = vec3::get_dot_prod(&r.dir, &oc);
+    let c = oc.length_squared() - radius * radius;
+    let discriminant = h * h - a * c;
+
+    if discriminant < 0.0 {
+        return -1.0;
+    } else {
+        return (h - f64::sqrt(discriminant)) / a;
+    }
 }
 
 fn ray_color(r: &ray::Ray) -> color::Color {
-    if hit_sphere(ray::Point3::new(0.0, 0.0, -1.0), 0.5, r) {
-        return color::Color::new(1.0, 0.0, 0.0);
+    let t = hit_sphere(ray::Point3::new(0.0, 0.0, -1.0), 0.5, r);
+
+    if t > 0.0 {
+        let n = (r.at(t) - vec3::Vec3::new(0.0, 0.0, -1.0)).unit_vector();
+        return color::Color::new(n.x + 1.0, n.y + 1.0, n.z + 1.0) * 0.5;
     }
     let unit_direction = r.dir.unit_vector();
     let a = 0.5 * (unit_direction.y + 1.0);

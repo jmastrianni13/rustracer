@@ -12,16 +12,16 @@ impl Ray {
         return Self { orig, dir };
     }
 
+    pub fn at(&self, t: f64) -> Point3 {
+        return self.orig.clone() + self.dir.clone() * t;
+    }
+
     fn direction(&self) -> &vec3::Vec3 {
         return &self.dir;
     }
 
     fn origin(&self) -> &Point3 {
         return &self.orig;
-    }
-
-    fn point3(&self, t: f64) -> vec3::Vec3 {
-        return self.orig.clone() + self.dir.clone() * t;
     }
 }
 
@@ -78,7 +78,7 @@ mod tests {
         let dir_v = vec3::Vec3::new(1.0, 2.0, 3.0);
         let r = Ray::new(orig_v, dir_v);
 
-        let r_point3 = r.point3(3.0);
+        let r_point3 = r.at(3.0);
         assert_eq!(r_point3.x, 4.0);
         assert_eq!(r_point3.y, 7.0);
         assert_eq!(r_point3.z, 10.0);
