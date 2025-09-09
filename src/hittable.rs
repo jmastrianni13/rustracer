@@ -11,12 +11,12 @@ pub struct HitRecord {
 
 impl HitRecord {
     pub fn new(p: ray::Point3, normal: vec3::Vec3, t: f64, front_face: bool) -> Self {
-        return HitRecord {
+        Self {
             p,
             normal,
             t,
             front_face,
-        };
+        }
     }
 
     pub fn set_face_normal(&mut self, r: &ray::Ray, outward_normal: &vec3::Vec3) {

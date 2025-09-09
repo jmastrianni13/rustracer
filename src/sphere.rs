@@ -9,10 +9,10 @@ pub struct Sphere {
 
 impl Sphere {
     pub fn new(center: ray::Point3, radius: f64) -> Self {
-        return Self {
+        Self {
             center,
             radius: radius.max(0.0),
-        };
+        }
     }
 }
 
@@ -46,6 +46,6 @@ impl hittable::Hittable for Sphere {
         let outward_normal = (rec.p.clone() - self.center.clone()) / self.radius;
         rec.set_face_normal(r, &outward_normal);
 
-        return true;
+        true
     }
 }

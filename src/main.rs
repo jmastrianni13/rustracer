@@ -13,13 +13,13 @@ fn main() {
 
 fn ray_color(r: &ray::Ray, world: &dyn hittable::Hittable) -> color::Color {
     let mut rec = hittable::HitRecord::default();
-    if world.hit(r, 0.0, rtweekend::infinity, &mut rec) {
+    if world.hit(r, 0.0, rtweekend::INFINITY, &mut rec) {
         return (rec.normal + color::Color::new(1.0, 1.0, 1.0)) * 0.5;
     }
 
     let unit_direction = r.dir.unit_vector();
     let a = 0.5 * (unit_direction.y + 1.0);
-    return color::Color::new(1.0, 1.0, 1.0) * (1.0 - a) + color::Color::new(0.5, 0.7, 1.0) * a;
+    color::Color::new(1.0, 1.0, 1.0) * (1.0 - a) + color::Color::new(0.5, 0.7, 1.0) * a
 }
 
 fn render_image() {

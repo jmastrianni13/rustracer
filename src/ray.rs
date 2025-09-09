@@ -9,19 +9,19 @@ pub struct Ray {
 
 impl Ray {
     pub fn new(orig: Point3, dir: vec3::Vec3) -> Self {
-        return Self { orig, dir };
+        Self { orig, dir }
     }
 
     pub fn at(&self, t: f64) -> Point3 {
-        return self.orig.clone() + self.dir.clone() * t;
+        self.orig.clone() + self.dir.clone() * t
     }
 
     fn direction(&self) -> &vec3::Vec3 {
-        return &self.dir;
+        &self.dir
     }
 
     fn origin(&self) -> &Point3 {
-        return &self.orig;
+        &self.orig
     }
 }
 

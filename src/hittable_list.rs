@@ -8,9 +8,9 @@ pub struct HittableList {
 
 impl HittableList {
     pub fn new() -> Self {
-        return HittableList {
+        Self {
             objects: Vec::new(),
-        };
+        }
     }
 
     pub fn clear(&mut self) {
@@ -32,7 +32,7 @@ impl hittable::Hittable for HittableList {
     ) -> bool {
         let mut temp_rec: hittable::HitRecord = rec.clone();
         let mut hit_anything = false;
-        let mut closest_so_far = ray_tmax.clone();
+        let mut closest_so_far = ray_tmax;
 
         for object in &self.objects {
             if object.hit(r, ray_tmin, closest_so_far, &mut temp_rec) {
@@ -42,6 +42,6 @@ impl hittable::Hittable for HittableList {
             }
         }
 
-        return hit_anything;
+        hit_anything
     }
 }

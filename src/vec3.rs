@@ -1,5 +1,4 @@
 use std::fmt;
-use std::io::Write;
 use std::ops::{Add, AddAssign, Div, DivAssign, Index, Mul, MulAssign, Neg, Sub};
 
 #[derive(Clone, Debug, Default)]
@@ -11,19 +10,19 @@ pub struct Vec3 {
 
 impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
-        return Self { x, y, z };
+        Self { x, y, z }
     }
 
     pub fn length(&self) -> f64 {
-        return self.length_squared().sqrt();
+        self.length_squared().sqrt()
     }
 
     pub fn length_squared(&self) -> f64 {
-        return self.x * self.x + self.y * self.y + self.z * self.z;
+        self.x * self.x + self.y * self.y + self.z * self.z
     }
 
     pub fn unit_vector(&self) -> Self {
-        return self.clone() / self.length();
+        self.clone() / self.length()
     }
 }
 
@@ -42,54 +41,54 @@ impl Index<usize> for Vec3 {
 
 impl fmt::Display for Vec3 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        return write!(f, "Vec3 {{ x:{}, y:{}, z:{} }}", self.x, self.y, self.z);
+        write!(f, "Vec3 {{ x:{}, y:{}, z:{} }}", self.x, self.y, self.z)
     }
 }
 
 impl Neg for Vec3 {
     type Output = Self;
     fn neg(self) -> Self::Output {
-        return Self::new(-self.x, -self.y, -self.z);
+        Self::new(-self.x, -self.y, -self.z)
     }
 }
 
 impl Add for Vec3 {
     type Output = Self;
     fn add(self, rhs: Self) -> Self {
-        return Self {
+        Self {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
             z: self.z + rhs.z,
-        };
+        }
     }
 }
 
 impl Div<f64> for Vec3 {
     type Output = Self;
     fn div(self, t: f64) -> Self {
-        return self * (1 as f64 / t);
+        self * (1_f64 / t)
     }
 }
 
 impl Mul<f64> for Vec3 {
     type Output = Self;
     fn mul(self, t: f64) -> Self {
-        return Self {
+        Self {
             x: self.x * t,
             y: self.y * t,
             z: self.z * t,
-        };
+        }
     }
 }
 
 impl Sub for Vec3 {
     type Output = Self;
     fn sub(self, rhs: Self) -> Self {
-        return Self {
+        Self {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
             z: self.z - rhs.z,
-        };
+        }
     }
 }
 
@@ -104,7 +103,7 @@ impl AddAssign for Vec3 {
 
 impl DivAssign<f64> for Vec3 {
     fn div_assign(&mut self, t: f64) {
-        *self *= 1 as f64 / t;
+        *self *= 1_f64 / t;
     }
 }
 
@@ -118,19 +117,19 @@ impl MulAssign<f64> for Vec3 {
 }
 
 fn get_hadamard_prod(lhs: &Vec3, rhs: &Vec3) -> Vec3 {
-    return Vec3::new(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
+    Vec3::new(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z)
 }
 
 pub fn get_dot_prod(lhs: &Vec3, rhs: &Vec3) -> f64 {
-    return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
+    lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z
 }
 
 fn get_cross_prod(lhs: &Vec3, rhs: &Vec3) -> Vec3 {
-    return Vec3::new(
+    Vec3::new(
         lhs.y * rhs.z - lhs.z * rhs.y,
         lhs.z * rhs.x - lhs.x * rhs.z,
         lhs.x * rhs.y - lhs.y * rhs.x,
-    );
+    )
 }
 
 #[cfg(test)]
