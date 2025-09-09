@@ -2,7 +2,7 @@ use std::fmt;
 use std::io::Write;
 use std::ops::{Add, AddAssign, Div, DivAssign, Index, Mul, MulAssign, Neg, Sub};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Vec3 {
     pub x: f64,
     pub y: f64,
