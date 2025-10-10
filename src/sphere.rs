@@ -1,4 +1,5 @@
 use crate::hittable;
+use crate::interval;
 use crate::ray;
 use crate::vec3;
 
@@ -17,13 +18,7 @@ impl Sphere {
 }
 
 impl hittable::Hittable for Sphere {
-    fn hit(
-        &self,
-        r: &ray::Ray,
-        ray_tmin: f64,
-        ray_tmax: f64,
-        rec: &mut hittable::HitRecord,
-    ) -> bool {
+    fn hit(&self, r: &ray::Ray, ray_t: interval::Interval, rec: &mut hittable::HitRecord) -> bool {
         let oc = self.center.clone() - r.orig.clone();
         let a = r.dir.length_squared();
         let h = vec3::get_dot_prod(&r.dir, &oc);
@@ -37,8 +32,11 @@ impl hittable::Hittable for Sphere {
         let sqrtd = f64::sqrt(discriminant);
         let root = (h - sqrtd) / a;
 
-        if (root <= ray_tmin) || (ray_tmax <= root) {
-            return false;
+        if !(ray_t.surrounds(root)) {
+            let root = (h + sqrtd) / a;
+            if !(ray_t.surrounds(root)) {
+                return false;
+            }
         }
 
         rec.t = root;

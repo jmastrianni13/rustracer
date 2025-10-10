@@ -2,6 +2,7 @@ use std::rc::Rc;
 mod color;
 mod hittable;
 mod hittable_list;
+mod interval;
 mod ray;
 mod rtweekend;
 mod sphere;
@@ -13,7 +14,11 @@ fn main() {
 
 fn ray_color(r: &ray::Ray, world: &dyn hittable::Hittable) -> color::Color {
     let mut rec = hittable::HitRecord::default();
-    if world.hit(r, 0.0, rtweekend::INFINITY, &mut rec) {
+    let interval = interval::Interval {
+        min: 0.0,
+        max: f64::INFINITY,
+    };
+    if world.hit(r, interval, &mut rec) {
         return (rec.normal + color::Color::new(1.0, 1.0, 1.0)) * 0.5;
     }
 
